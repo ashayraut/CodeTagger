@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "overallRiskLevel": "HIGH",
+    "primaryAttentionTypes": ["CORRECTNESS", "RELIABILITY", "STABILITY"],
+    "recommendedReviewRequirement": "HUMAN_REVIEW",
+    "recommendedTestingDepth": "INTEGRATION",
+    "filesAnalyzed": 1,
+    "filesWithErrors": 0
+  },
+  "files": [
+    {
+      "file": "examples/input/OrderProcessor.java",
+      "fileSummary": {
+        "overallRiskLevel": "HIGH",
+        "primaryAttentionTypes": ["CORRECTNESS", "RELIABILITY", "STABILITY"],
+        "recommendedReviewRequirement": "HUMAN_REVIEW",
+        "recommendedTestingDepth": "INTEGRATION"
+      },
+      "methods": [
+        {
+          "name": "placeOrder",
+          "className": "OrderProcessor",
+          "signature": "Order placeOrder(String customerId, List<OrderItem> items, PaymentDetails payment)",
+          "riskLevel": "HIGH",
+          "attentionTypes": ["STABILITY", "RELIABILITY", "CORRECTNESS"],
+          "reviewRequirement": "HUMAN_REVIEW",
+          "testingDepth": "INTEGRATION",
+          "rationale": "Multi-step flow spanning inventory reservation, payment capture, and persistence — partial failure at any step requires careful rollback to avoid inventory leaks or double charges."
+        },
+        {
+          "name": "cancelOrder",
+          "className": "OrderProcessor",
+          "signature": "void cancelOrder(String orderId, String reason)",
+          "riskLevel": "HIGH",
+          "attentionTypes": ["STABILITY", "CORRECTNESS"],
+          "reviewRequirement": "HUMAN_REVIEW",
+          "testingDepth": "INTEGRATION",
+          "rationale": "Triggers a payment refund and inventory release; incorrect status transitions or refund failures directly impact customers and finances."
+        },
+        {
+          "name": "totalAmount",
+          "className": "OrderProcessor",
+          "signature": "BigDecimal totalAmount(List<OrderItem> items)",
+          "riskLevel": "MEDIUM",
+          "attentionTypes": ["CORRECTNESS"],
+          "reviewRequirement": "HUMAN_REVIEW",
+          "testingDepth": "UNIT_ONLY",
+          "rationale": "Monetary calculation with a hardcoded tax rate; precision errors or incorrect rounding propagate directly to customer charges."
+        },
+        {
+          "name": "summarize",
+          "className": "OrderProcessor",
+          "signature": "String summarize(Order order)",
+          "riskLevel": "LOW",
+          "attentionTypes": ["CORRECTNESS"],
+          "reviewRequirement": "AUTO_MERGE",
+          "testingDepth": "UNIT_ONLY",
+          "rationale": "Read-only string formatting for logging with no business logic or side effects."
+        }
+      ]
+    }
+  ]
+}

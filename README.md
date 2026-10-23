@@ -25,20 +25,42 @@ The script runs through the `claude` CLI — no API key needed. Authentication i
 claude --version   # verify it's available
 ```
 
+## Examples
+
+The `examples/` directory contains sample Java files and their expected output:
+
+- `examples/input/AuthService.java` — authentication service with CRITICAL/HIGH risk methods
+- `examples/input/OrderProcessor.java` — order flow with HIGH/MEDIUM risk methods
+- `examples/output/AuthService.json` — full tagged output for AuthService
+- `examples/output/OrderProcessor.json` — full tagged output for OrderProcessor
+
+Run them yourself:
+```bash
+python3 code_tagger.py --file examples/input/AuthService.java --pretty
+```
+
+## Tests
+
+```bash
+python3 -m pytest tests/ -v
+```
+
+Tests cover roll-up logic, JSON parsing, markdown fence stripping, error handling, and CLI availability checks. The `claude` CLI is mocked so no authentication is required to run them.
+
 ## Usage
 
 ```bash
 # Analyze a single file
-python3 code-tagger.py --file src/main/java/com/example/AuthService.java --pretty
+python3 code_tagger.py --file src/main/java/com/example/AuthService.java --pretty
 
 # Analyze all Java files in a directory
-python3 code-tagger.py --dir src/main/java/com/example --pretty
+python3 code_tagger.py --dir src/main/java/com/example --pretty
 
 # Analyze only files changed in the current git diff vs HEAD
-python3 code-tagger.py --diff --pretty
+python3 code_tagger.py --diff --pretty
 
 # Analyze files changed since branching from main
-python3 code-tagger.py --diff main --pretty
+python3 code_tagger.py --diff main --pretty
 ```
 
 Output is JSON to stdout. Use `--pretty` for human reading or omit it for CI piping.
@@ -98,7 +120,7 @@ The intended use is **generated-on-demand at PR time**, not as checked-in metada
 ```yaml
 - name: Tag changed Java code
   run: |
-    python3 code-tagger.py --diff origin/main --pretty > tag-report.json
+    python3 code_tagger.py --diff origin/main --pretty > tag-report.json
 
 - name: Enforce review gate
   run: |

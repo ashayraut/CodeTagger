@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "overallRiskLevel": "CRITICAL",
+    "primaryAttentionTypes": ["CORRECTNESS", "RELIABILITY", "SECURITY", "STABILITY"],
+    "recommendedReviewRequirement": "SECURITY_REVIEW",
+    "recommendedTestingDepth": "INTEGRATION",
+    "filesAnalyzed": 1,
+    "filesWithErrors": 0
+  },
+  "files": [
+    {
+      "file": "examples/input/AuthService.java",
+      "fileSummary": {
+        "overallRiskLevel": "CRITICAL",
+        "primaryAttentionTypes": ["CORRECTNESS", "RELIABILITY", "SECURITY", "STABILITY"],
+        "recommendedReviewRequirement": "SECURITY_REVIEW",
+        "recommendedTestingDepth": "INTEGRATION"
+      },
+      "methods": [
+        {
+          "name": "validateToken",
+          "className": "AuthService",
+          "signature": "Optional<String> validateToken(String token)",
+          "riskLevel": "CRITICAL",
+          "attentionTypes": ["SECURITY", "CORRECTNESS"],
+          "reviewRequirement": "SECURITY_REVIEW",
+          "testingDepth": "INTEGRATION",
+          "rationale": "JWT verification is an auth gate; a logic error here allows unauthenticated access to the entire system."
+        },
+        {
+          "name": "login",
+          "className": "AuthService",
+          "signature": "String login(String username, String rawPassword)",
+          "riskLevel": "CRITICAL",
+          "attentionTypes": ["SECURITY", "STABILITY"],
+          "reviewRequirement": "SECURITY_REVIEW",
+          "testingDepth": "INTEGRATION",
+          "rationale": "Password verification and session token issuance are the primary authentication path; timing attacks and error message leakage are real risks here."
+        },
+        {
+          "name": "revokeAllSessions",
+          "className": "AuthService",
+          "signature": "void revokeAllSessions(String userId)",
+          "riskLevel": "HIGH",
+          "attentionTypes": ["SECURITY", "RELIABILITY"],
+          "reviewRequirement": "SECURITY_REVIEW",
+          "testingDepth": "INTEGRATION",
+          "rationale": "Bulk session revocation is a destructive auth operation; partial failure leaves the user in an inconsistent state."
+        },
+        {
+          "name": "getDisplayName",
+          "className": "AuthService",
+          "signature": "String getDisplayName(String userId)",
+          "riskLevel": "LOW",
+          "attentionTypes": ["CORRECTNESS"],
+          "reviewRequirement": "HUMAN_REVIEW",
+          "testingDepth": "UNIT_ONLY",
+          "rationale": "Read-only display lookup with no auth logic; failure degrades gracefully to a fallback string."
+        }
+      ]
+    }
+  ]
+}
