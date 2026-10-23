@@ -17,9 +17,12 @@ The file-level summary rolls up to the strictest values found across all methods
 
 ## Setup
 
+The script runs through the `claude` CLI — no API key needed. Authentication is handled natively by Claude Code.
+
 ```bash
-pip install anthropic
-export ANTHROPIC_API_KEY=sk-ant-...
+# Install Claude Code if you haven't already, then authenticate once:
+# https://claude.ai/code
+claude --version   # verify it's available
 ```
 
 ## Usage
@@ -94,8 +97,6 @@ The intended use is **generated-on-demand at PR time**, not as checked-in metada
 
 ```yaml
 - name: Tag changed Java code
-  env:
-    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
   run: |
     python3 code-tagger.py --diff origin/main --pretty > tag-report.json
 
